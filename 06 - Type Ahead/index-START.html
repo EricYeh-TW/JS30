@@ -18,16 +18,17 @@
         'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
       const cities = [];
       const searchInput = document.querySelector('.search');
-      const suggestions = document.querySelector('.suggestions');
+      const suggestions = document.querySelector('.suggestions'); // 清單
 
       fetch(endpoint)
         .then((blob) => blob.json())
         .then((data) => cities.push(...data)); // 使用其餘參數讓 push 後是 flat array 或是將 cities 改成 let 宣告
+      // console.log(cities);
 
       function findMatched(wordToMatch, cities) {
         return cities.filter((place) => {
-          const regex = new RegExp(wordToMatch, 'gi');
-          return place.city.match(regex) || place.state.match(regex);
+          const regex = new RegExp(wordToMatch, 'gi'); // 所以要在這裡建立新的正則表示法
+          return place.city.match(regex) || place.state.match(regex); // match() 要使用政則表示法進行篩選 但是正則表示法不能直接使用引數或變數
         });
       }
 
@@ -36,19 +37,22 @@
         const matchArray = findMatched(this.value, cities);
         const html = matchArray
           .map((place) => {
+            const regex = new RegExp(this.value, 'gi');
+            const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`); // 對符合輸入的字串進行高亮顯示
+            const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`); // 對符合輸入的字串進行高亮顯示
             return `
             <li>
-              <span class="name">${place.city}, ${place.state}</span>
+              <span class="name">${cityName}, ${stateName}</span>
               <span class="population">${place.population}</span>
             </li>
-          `;
+          `; // 對篩選的結果創立一個新的 li tag
           })
-          .join('');
-        suggestions.innerHTML = html;
+          .join(''); // map 回傳的會是 array 所有要把它們合併為字串
+        suggestions.innerHTML = html; // innerHTML 再將字串變成 dom node
       }
 
       searchInput.addEventListener('change', displayMatched);
-      searchInput.addEventListener('keyup', displayMatched);
+      searchInput.addEventListener('keyup', displayMatched); // 監聽逐字輸入
     </script>
   </body>
 </html>
