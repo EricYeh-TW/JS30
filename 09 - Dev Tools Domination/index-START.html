@@ -1,46 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Console Tricks!</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Console Tricks!</title>
+  </head>
+  <body>
+    <p onClick="makeGreen()">×BREAK×DOWN×</p>
 
-  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+    <script>
+      const dogs = [
+        { name: 'Snickers', age: 2 },
+        { name: 'hugo', age: 8 },
+      ];
 
-  <script>
-    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+      function makeGreen() {
+        const p = document.querySelector('p');
+        p.style.color = '#BADA55';
+        p.style.fontSize = '50px';
+      }
 
-    function makeGreen() {
-      const p = document.querySelector('p');
-      p.style.color = '#BADA55';
-      p.style.fontSize = '50px';
-    }
+      // Regular
+      console.log();
 
-    // Regular
+      // Interpolated
+      // 延遲
+      console.log('some text %s 123', '456');
 
-    // Interpolated
+      // Styled
+      console.log('%c some text', 'background: red;');
 
-    // Styled
+      // warning!
+      console.warn('some text');
 
-    // warning!
+      // Error :|
+      console.error('some text');
 
-    // Error :|
+      // Info
+      console.info('some text');
 
-    // Info
+      // Testing
+      // 當條件false才會觸發
+      console.assert(true, 'some text');
 
-    // Testing
+      // clearing
+      console.clear();
 
-    // clearing
+      // Viewing DOM Elements
+      // 檢視物件的所有方法以及屬性
+      console.dir(p);
 
-    // Viewing DOM Elements
+      // Grouping together
+      // 依照條件對log進行分類，可以用groupCollapsed預設關閉顯示
+      arrays.forEach((array) => {
+        console.groupCollapsed(`${array.name}`);
+        console.log(array.name);
+        console.log(array.age);
+        console.groupEnd(`${array.name}`);
+      });
 
-    // Grouping together
+      // counting
+      // 屬關鍵字被呼叫了幾次
+      console.count('some text');
+      console.count('the text');
+      console.count('some text');
+      console.count('the text');
+      console.count('some text');
 
-    // counting
-
-    // timing
-
-  </script>
-</body>
+      // timing
+      // 測量程式執行時間
+      // 有一類似方法 window.performance.now()
+      console.time('fetching data');
+      fetch(url).then((data) => {
+        console.timeEnd('fetching data');
+      });
+    </script>
+  </body>
 </html>
