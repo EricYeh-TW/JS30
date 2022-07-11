@@ -175,14 +175,18 @@
           timeout = setTimeout(later, wait);
           if (callNow) func.apply(context, args);
         };
-      }
+      } // 用來減少 scroll 事件監聽的次數，每20毫秒只監聽一次
 
       const sliderImages = document.querySelectorAll('.slide-in');
 
       function checkSlide(e) {
         sliderImages.forEach((sliderImage) => {
           const slideInAt = window.scrollY + window.innerHeight - sliderImage.height / 2;
+          // scrollY 會計算滾輪下滑了多少像素，是從視窗頂部開始算的
+          // innerHeight 是視窗載入時的高度
+          // 這裡計算圖片的一半載入到畫面上
           const imageBottom = sliderImage.offsetTop + sliderImage.height;
+          // offsetTop 是當前元素相對於 offsetParents 元素的頂部內距的距離
           const isHalfShown = slideInAt > sliderImage.offsetTop; // boolean
           const isNotScrolledPast = window.scrollY < imageBottom; // boolean
 
