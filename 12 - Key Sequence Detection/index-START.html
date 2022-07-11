@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Key Detection</title>
-  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
-</head>
-<body>
-<script>
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Key Detection</title>
+    <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+  </head>
+  <body>
+    <script>
+      const pressed = [];
+      const secretCode = 'test';
+
+      window.addEventListener('keyup', (e) => {
+        // 監聽按下的按鍵
+        pressed.push(e.key);
+        pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+        // splice(從索引幾開始, 要刪除幾個元素(包含索引自己))
+        // 負號的索引值 [..., -5, -4, -3, -2, -1] 最後一個會是 -1
+        if (pressed.join().includes(secretCode)) {
+          console.log('Bingo');
+        }
+      });
+    </script>
+  </body>
 </html>
