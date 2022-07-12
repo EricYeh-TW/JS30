@@ -56,7 +56,56 @@
     <script>
       const addItems = document.querySelector('.add-items');
       const itemsList = document.querySelector('.plates');
-      const items = [];
+      const items = JSON.parse(localStorage.getItem('items')) || [];
+      // 這裡會把存在 local 的JSON string 轉換回 array
+
+      function addItem(e) {
+        e.preventDefault();
+        // html form 會自動刷新並傳送，此方法可以停止他異動更新
+        const text = this.querySelector('[name=item]').value;
+        const item = {
+          text: text,
+          done: false,
+        };
+        items.push(item);
+        populateList(items, itemsList);
+        localStorage.setItem('items', JSON.stringify(items));
+        // 直接設置 items 他只會認得 items 是一個 object 不會辨別它的內容 因此要將他轉乘JSON string
+        // 這裡回傳的是 string
+        this.reset();
+      }
+
+      function populateList(plates = [], platesList) {
+        // 這裡不直接使用全域變數的items，這是為了保持函式的彈性
+        platesList.innerHTML = plates
+          .map((plate, i) => {
+            // label 的 for 屬性不能忘，會出錯
+            return `
+            <li>
+              <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} />
+              <label for="item${i}">${plate.text}</label>
+            </li>
+          `;
+          })
+          .join('');
+      }
+
+      function toggleDone(e) {
+        if (!e.target.matches('input')) return; // 過濾掉 input 的資訊
+        console.log(e.target); // child items
+        const index = e.target.dataset.index;
+        items[index].done = !items[index].done; // 反轉
+
+        localStorage.setItem('items', JSON.stringify(items));
+        populateList(items, itemsList);
+      }
+
+      addItems.addEventListener('submit', addItem);
+      // submit 事件涵蓋了發送的所有動作，包括點擊、Enter、以及其他等等
+      itemsList.addEventListener('click', toggleDone);
+      // 這裡不給 checkbox 監聽點擊事件，由於清單上加入的新物件都是後來才有的，他們無法被加上監聽事件，所以這裡選擇他的父元素為對象
+      populateList(items, itemsList);
+      // 在頁面載入時先讀取本地資料 有的話就顯示
     </script>
   </body>
 </html>
