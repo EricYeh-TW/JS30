@@ -1,56 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>JS Reference VS Copy</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Reference VS Copy</title>
+  </head>
+  <body>
+    <script>
+      // start with strings, numbers and booleans
 
-  <script>
-    // start with strings, numbers and booleans
+      // Let's say we have an array
+      const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
 
-    // Let's say we have an array
-    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+      // and we want to make a copy of it.
 
-    // and we want to make a copy of it.
+      // You might think we can just do something like this:
+      const team = players;
+      team[3] = 'lux';
+      console.log(players, team); // ['Wes', 'Sarah', 'Ryan', 'lux'] 陣列的複製是採用淺拷貝的方式
 
-    // You might think we can just do something like this:
+      // however what happens when we update that array?
 
-    // however what happens when we update that array?
+      // now here is the problem!
 
-    // now here is the problem!
+      // oh no - we have edited the original array too!
 
-    // oh no - we have edited the original array too!
+      // Why? It's because that is an array reference, not an array copy. They both point to the same array!
 
-    // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+      // So, how do we fix this? We take a copy instead!
+      // 以下這些方法可以深拷貝陣列
+      const team2 = players.splice();
+      const team3 = [].concat(players);
+      const team4 = [...players];
+      const team5 = Array.from(players);
 
-    // So, how do we fix this? We take a copy instead!
+      // one way
 
-    // one way
+      // or create a new array and concat the old one in
 
-    // or create a new array and concat the old one in
+      // or use the new ES6 Spread
 
-    // or use the new ES6 Spread
+      // now when we update it, the original one isn't changed
 
-    // now when we update it, the original one isn't changed
+      // The same thing goes for objects, let's say we have a person object
 
-    // The same thing goes for objects, let's say we have a person object
+      // with Objects
+      const person = {
+        name: 'Wes Bos',
+        age: 80,
+      };
 
-    // with Objects
-    const person = {
-      name: 'Wes Bos',
-      age: 80
-    };
+      // and think we make a copy:
+      // 物件一樣是使用淺拷貝方式
+      const captain = person;
+      captain.age = 99;
+      console.log(person.age, captain.age); // 99 99
 
-    // and think we make a copy:
+      // how do we take a copy instead?
+      // 使用Obj.assign可以對原物件進行深拷貝，但是只能拷貝到第一層，如果是多層結構內部的屬性依舊會被改變
+      const cap2 = Object.assign({}, person, { number: 99, age: 12 });
+      const cap3 = JSON.parse(JSON.stringify(person));
+      const cap4 = { ...person };
 
-    // how do we take a copy instead?
+      // We will hopefully soon see the object ...spread
 
-    // We will hopefully soon see the object ...spread
-
-    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
-
-  </script>
-
-</body>
+      // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+    </script>
+  </body>
 </html>
