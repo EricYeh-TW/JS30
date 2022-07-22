@@ -1,48 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Understanding JavaScript's Capture</title>
-</head>
-<body class="bod">
-
-  <div class="one">
-    <div class="two">
-      <div class="three">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Understanding JavaScript's Capture</title>
+  </head>
+  <body class="bod">
+    <div class="one">
+      one
+      <div class="two">
+        two
+        <div class="three">three</div>
       </div>
     </div>
-  </div>
+    <button id="btn">click</button>
 
-<style>
-  html {
-    box-sizing: border-box;
-  }
-  
-  *, *:before, *:after { 
-    box-sizing: inherit; 
-  }
+    <style type="text/css">
+      html {
+        box-sizing: border-box;
+      }
 
-  div {
-    width: 100%;
-    padding: 100px;
-  }
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
 
-  .one {
-    background: thistle;
-  }
+      div {
+        width: 100%;
+        padding: 100px;
+      }
 
-  .two {
-    background: mistyrose;
-  }
+      .one {
+        background: thistle;
+      }
 
-  .three {
-    background: coral;
-  }
-</style>
+      .two {
+        background: mistyrose;
+      }
 
-<button></button>
-<script>
+      .three {
+        background: coral;
+      }
+    </style>
 
-</script>
-</body>
+    <script>
+      const divs = document.querySelectorAll('div');
+
+      function logText(e) {
+        console.log(this.classList.value);
+
+        // 2) stopPropagation will stop capturing or bubbling event
+        e.stopPropagation();
+      }
+
+      // 1) capturing or bubbling are boolean, they decide the sort of event firing
+      divs.forEach((div) => div.addEventListener('click', logText, false));
+      // three => two => one, from bottom to top
+      divs.forEach((div) => div.addEventListener('click', logText, true));
+      // one => two => three, from top to bottom
+
+      // 3) the third option can be an object, and the once property will unbind the event after firing
+      // prettier-ignore
+      divs.forEach((div) => div.addEventListener('click', logText, {
+        capture: false,
+        once: true
+      }));
+    </script>
+  </body>
 </html>
