@@ -247,22 +247,43 @@
       const nav = document.querySelector('.top');
 
       function handleEnter() {
-        this.classList.add('trigger-enter');
-        // setTimeout(function () {
-        //   this.classList.add('trigger-enter-active');
-        // }, 150);
-        // 這裡不能使用普通function，this綁定的是window物件
-        setTimeout(() => {
-          this.classList.add('trigger-enter-active');
-        }, 150);
         // 2) 使用兩個 add class 並且錯開時間差是因為 display:block opacity:1 不能同時出現
         // display 並不能做動畫，因此先讓他改變但保持 opacity 為0，過一些時間再讓 opacity 為1
         // 對 display:none opacity:0 作顯現時就需要此技巧
+        this.classList.add('trigger-enter');
+
+        setTimeout(() => {
+          // 這裡如果使用普通 function，this 綁定的是 window 物件
+          // 5) 判斷有加入 trigger-enter 才接著加入 trigger-enter-active，避免過快的移動導致出錯
+          if (this.classList.contains('trigger-enter')) {
+            this.classList.add('trigger-enter-active');
+          }
+        }, 150);
+
+        // 3) add a open class to background to show up
         background.classList.add('open');
+
+        // 4) take the dropdown's position that we hover
+        const dropdown = this.querySelector('.dropdown');
+        const dropdownCoords = dropdown.getBoundingClientRect();
+        // console.log(dropdownCoords);
+        // 我們需要知道 nav 的位置，因為 nav 可能不會一直都在最上面，當她有變化時 dropdown 的高度會出錯
+        const navCoords = nav.getBoundingClientRect();
+        const coords = {
+          height: dropdownCoords.height,
+          width: dropdownCoords.width,
+          top: dropdownCoords.top - navCoords.top,
+          left: dropdownCoords.left - navCoords.left,
+        };
+
+        // 5) assign the position, width & height to background
+        background.style.setProperty('width', `${coords.width}px`);
+        background.style.setProperty('height', `${coords.height}px`);
+        background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
       }
+
       function handleLeave() {
         this.classList.remove('trigger-enter', 'trigger-enter-active');
-        // 3) add a open class to background to show up
         background.classList.remove('open');
       }
 
