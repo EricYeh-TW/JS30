@@ -6,6 +6,8 @@
   </head>
   <body>
     <h2>Cool</h2>
+    <h2>Cool</h2>
+    <!-- <h2>Cool</h2> -->
     <nav class="top">
       <div class="dropdownBackground">
         <span class="arrow"></span>
@@ -244,12 +246,13 @@
         const dropdownCoords = dropdown.getBoundingClientRect();
         console.log(dropdownCoords);
         const navCoords = nav.getBoundingClientRect();
+        console.log(navCoords);
 
         const coords = {
           height: dropdownCoords.height,
           width: dropdownCoords.width,
-          top: dropdownCoords.top - navCoords.top,
-          left: dropdownCoords.left - navCoords.left,
+          top: dropdownCoords.top,
+          left: dropdownCoords.left,
         };
 
         background.style.setProperty('width', `${coords.width}px`);
@@ -258,8 +261,8 @@
       }
 
       function handleLeave() {
-        this.classList.remove('trigger-enter', 'trigger-enter-active');
-        background.classList.remove('open');
+        // this.classList.remove('trigger-enter', 'trigger-enter-active');
+        // background.classList.remove('open');
       }
 
       triggers.forEach((trigger) => trigger.addEventListener('mouseenter', handleEnter));
