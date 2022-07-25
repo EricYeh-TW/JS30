@@ -1,41 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Click and Drag</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="items">
-    <div class="item item1">01</div>
-    <div class="item item2">02</div>
-    <div class="item item3">03</div>
-    <div class="item item4">04</div>
-    <div class="item item5">05</div>
-    <div class="item item6">06</div>
-    <div class="item item7">07</div>
-    <div class="item item8">08</div>
-    <div class="item item9">09</div>
-    <div class="item item10">10</div>
-    <div class="item item11">11</div>
-    <div class="item item12">12</div>
-    <div class="item item13">13</div>
-    <div class="item item14">14</div>
-    <div class="item item15">15</div>
-    <div class="item item16">16</div>
-    <div class="item item17">17</div>
-    <div class="item item18">18</div>
-    <div class="item item19">19</div>
-    <div class="item item20">20</div>
-    <div class="item item21">21</div>
-    <div class="item item22">22</div>
-    <div class="item item23">23</div>
-    <div class="item item24">24</div>
-    <div class="item item25">25</div>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Click and Drag</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="items">
+      <div class="item item1">01</div>
+      <div class="item item2">02</div>
+      <div class="item item3">03</div>
+      <div class="item item4">04</div>
+      <div class="item item5">05</div>
+      <div class="item item6">06</div>
+      <div class="item item7">07</div>
+      <div class="item item8">08</div>
+      <div class="item item9">09</div>
+      <div class="item item10">10</div>
+      <div class="item item11">11</div>
+      <div class="item item12">12</div>
+      <div class="item item13">13</div>
+      <div class="item item14">14</div>
+      <div class="item item15">15</div>
+      <div class="item item16">16</div>
+      <div class="item item17">17</div>
+      <div class="item item18">18</div>
+      <div class="item item19">19</div>
+      <div class="item item20">20</div>
+      <div class="item item21">21</div>
+      <div class="item item22">22</div>
+      <div class="item item23">23</div>
+      <div class="item item24">24</div>
+      <div class="item item25">25</div>
+    </div>
 
-<script>
-</script>
+    <script>
+      const slider = document.querySelector('.items');
+      let isDown = false;
+      let startX;
+      let scrollLeft;
 
+      // 1) add event and make it only work for mousemove with mousedown
+      slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        slider.classList.add('active');
+        // 這裡的數值並不會隨著移動滑鼠而有改變
+        startX = e.pageX - slider.offsetLeft;
+        // 這裡紀錄上一次捲動的距離，避免每次移動滑鼠之後都重新計算造成跳動
+        scrollLeft = slider.scrollLeft;
+        console.log(e.pageX);
+        console.log(scrollLeft);
+      });
+      slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.classList.remove('active');
+      });
+      slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.classList.remove('active');
+      });
+      slider.addEventListener('mousemove', (e) => {
+        // 當在範圍內按下並移動才會有所反應
+        if (!isDown) return;
+        // 預防點擊捲動時去選到文字等行為
+        e.preventDefault();
+        // 這裡的數值會隨著移動滑鼠而有改變
+        const x = e.pageX - slider.offsetLeft;
+        // console.log({ x, startX });
+        // 2) calculate how far have we deviated from the initial space
+        const walk = x - startX;
+
+        // 3) make the slider scroll with our mouse
+        slider.scrollLeft = scrollLeft - walk;
+      });
+    </script>
   </body>
 </html>

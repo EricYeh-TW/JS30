@@ -28,7 +28,9 @@
       // 1) add event
       speed.addEventListener('mousemove', function (e) {
         // 2) calculate how many percent the mouse's position is in the bar
-        const y = e.pageY - this.offsetTop;
+        // console.log(this.offsetHeight);
+        const y = e.offsetY;
+        console.log(y);
         const percent = y / this.offsetHeight;
         const height = Math.round(percent * 100) + '%';
 
