@@ -45,8 +45,38 @@
           .join('');
       }
 
+      function setVoice() {
+        // show the speaker's name we selected
+        console.log(this.value);
+        msg.voice = voices.find((voice) => voice.name === this.value);
+      }
+
+      // 4) fire speaking
+      // 給這個函式一個預設的值為true
+      function toggle(startOver = true) {
+        // 取消上一次的說話，重新開始
+        speechSynthesis.cancel();
+        if (startOver) {
+          speechSynthesis.speak(msg);
+        }
+      }
+
+      function setOption() {
+        // console.log(this.name, this.value);
+        msg[this.name] = this.value;
+        toggle();
+      }
+
       // 1) add event
       speechSynthesis.addEventListener('voiceschanged', populateVoices);
+      // 3) change language by using the dropdown menu
+      voicesDropdown.addEventListener('change', setVoice);
+      // 5) add event to rate bar, pitch bar, and text input
+      options.forEach((option) => option.addEventListener('change', setOption));
+      speakButton.addEventListener('click', toggle);
+      // 這裡後面不能直接寫toggle(false)，那樣他不是回呼函式的寫法，我們使用bind()來呼叫
+      // 這裡也可以使用() => toggle(false)，這是 React 中的寫法
+      stopButton.addEventListener('click', toggle.bind(null, false));
     </script>
   </body>
 </html>
