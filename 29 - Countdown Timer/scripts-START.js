@@ -29,7 +29,6 @@ function timer(seconds) {
 
 // 2) 顯示我們設定的倒數時間
 function displayTimeLeft(seconds) {
-  console.log(seconds);
   const minutes = Math.floor(seconds / 60);
   const remainderSeconds = seconds % 60;
   // 2m:4s => 2m:04s
@@ -66,6 +65,7 @@ document.customForm.addEventListener('submit', function (e) {
   // 防止submit刷新頁面
   e.preventDefault();
   const mins = this.minutes.value;
+
   timer(mins * 60);
   // submit完後清空
   this.reset();
